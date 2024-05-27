@@ -75,5 +75,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Monitoring and Alerting') {
+            steps {
+                script {
+                    echo 'Monitoring and Alerting stage: Placeholder for monitoring tool integration'
+                    // Add commands to integrate with Datadog, New Relic, or other monitoring tools
+                }
+            }
+        }
     }
 }
