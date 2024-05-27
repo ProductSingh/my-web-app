@@ -10,6 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/ProductSingh/my-web-app.git', branch: 'main'
+                echo 'Checkout stage completed: Repository cloned'
             }
         }
 
@@ -48,8 +49,14 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                    sh 'vercel --token $VERCEL_TOKEN_STAGING --prod'
-                    echo 'Deploy to Staging stage completed: Application deployed to Vercel staging'
+                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_STAGING --prod', returnStdout: true).trim()
+                    echo "Staging deployment output: ${vercelOutput}"
+                    def urlMatch = (vercelOutput =~ /(https:\/\/[^ ]+\.vercel\.app)/)
+                    if (urlMatch) {
+                        echo "Staging URL: ${urlMatch[0][0]}"
+                    } else {
+                        echo "Staging URL not found in output."
+                    }
                 }
             }
         }
@@ -57,8 +64,14 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 script {
-                    sh 'vercel --token $VERCEL_TOKEN_PRODUCTION --prod'
-                    echo 'Deploy to Production stage completed: Application deployed to Vercel production'
+                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_PRODUCTION --prod', returnStdout: true).trim()
+                    echo "Production deployment output: ${vercelOutput}"
+                    def urlMatch = (vercelOutput =~ /(https:\/\/[^ ]+\.vercel\.app)/)
+                    if (urlMatch) {
+                        echo "Production URL: ${urlMatch[0][0]}"
+                    } else {
+                        echo "Production URL not found in output."
+                    }
                 }
             }
         }
