@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_STAGING --prod', returnStdout: true).trim()
+                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_STAGING --yes --prod', returnStdout: true).trim()
                     echo "Staging deployment output: ${vercelOutput}"
                     def urlMatch = (vercelOutput =~ /(https:\/\/[^ ]+\.vercel\.app)/)
                     if (urlMatch) {
@@ -64,7 +64,7 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 script {
-                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_PRODUCTION --prod', returnStdout: true).trim()
+                    def vercelOutput = sh(script: 'vercel --token $VERCEL_TOKEN_PRODUCTION --yes --prod', returnStdout: true).trim()
                     echo "Production deployment output: ${vercelOutput}"
                     def urlMatch = (vercelOutput =~ /(https:\/\/[^ ]+\.vercel\.app)/)
                     if (urlMatch) {
